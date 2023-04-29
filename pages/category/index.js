@@ -2,13 +2,7 @@ import { getGlobalNotionData } from '@/lib/notion/getNotionData'
 import React from 'react'
 import { useGlobal } from '@/lib/global'
 import * as ThemeMap from '@/themes'
-import BLOG from '@/blog.config'
 
-/**
- * 分类首页
- * @param {*} props
- * @returns
- */
 export default function Category(props) {
   const { theme } = useGlobal()
   const ThemeComponents = ThemeMap[theme]
@@ -25,10 +19,12 @@ export default function Category(props) {
 }
 
 export async function getStaticProps() {
-  const props = await getGlobalNotionData({ from: 'category-index-props' })
-  delete props.allPages
+  const props = await getGlobalNotionData({
+    from: 'category-index-props',
+    categoryCount: 0
+  })
   return {
     props,
-    revalidate: parseInt(BLOG.NEXT_REVALIDATE_SECOND)
+    revalidate: 1
   }
 }

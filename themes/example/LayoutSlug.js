@@ -1,3 +1,4 @@
+import { getPageTableOfContents } from 'notion-utils'
 import LayoutBase from './LayoutBase'
 import { ArticleLock } from './components/ArticleLock'
 import NotionPage from '@/components/NotionPage'
@@ -11,10 +12,15 @@ export const LayoutSlug = props => {
     return <LayoutBase {...props} />
   }
 
+  if (!lock && post?.blockMap?.block) {
+    post.content = Object.keys(post.blockMap.block)
+    post.toc = getPageTableOfContents(post, post.blockMap)
+  }
+
   return (
         <LayoutBase {...props}>
 
-                {lock && <ArticleLock validPassword={validPassword} />}
+                {lock && <ArticleLock password={post.password} validPassword={validPassword} />}
 
                 {!lock && <div id="notion-article" className="px-2">
 

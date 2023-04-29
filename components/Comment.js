@@ -1,6 +1,7 @@
 import BLOG from '@/blog.config'
 import dynamic from 'next/dynamic'
 import Tabs from '@/components/Tabs'
+import { useGlobal } from '@/lib/global'
 import React from 'react'
 import { useRouter } from 'next/router'
 
@@ -14,13 +15,6 @@ const WalineComponent = dynamic(
 const CusdisComponent = dynamic(
   () => {
     return import('@/components/CusdisComponent')
-  },
-  { ssr: false }
-)
-
-const TwikooCompenent = dynamic(
-  () => {
-    return import('@/components/Twikoo')
   },
   { ssr: false }
 )
@@ -49,6 +43,10 @@ const ValineComponent = dynamic(() => import('@/components/ValineComponent'), {
 })
 
 const Comment = ({ frontMatter }) => {
+  if (!frontMatter) {
+    return <>Loading...</>
+  }
+  const { isDarkMode } = useGlobal()
   const router = useRouter()
 
   React.useEffect(() => {
@@ -63,17 +61,9 @@ const Comment = ({ frontMatter }) => {
     }, 200)
   }, [])
 
-  if (!frontMatter) {
-    return <>Loading...</>
-  }
-
   return (
     <div id='comment' className='comment mt-5 text-gray-800 dark:text-gray-300'>
       <Tabs>
-
-         { BLOG.COMMENT_TWIKOO_ENV_ID && (<div key='Twikoo'>
-            <TwikooCompenent/>
-         </div>)}
 
         { BLOG.COMMENT_WALINE_SERVER_URL && (<div key='Waline'>
             <WalineComponent/>
@@ -85,7 +75,7 @@ const Comment = ({ frontMatter }) => {
 
         {BLOG.COMMENT_GISCUS_REPO && (
           <div key="Giscus">
-            <GiscusComponent className="px-2" />
+            <GiscusComponent isDarkMode={isDarkMode} className="px-2" />
           </div>
         )}
 

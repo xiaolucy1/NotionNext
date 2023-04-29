@@ -11,10 +11,11 @@ import BlogPostListEmpty from './BlogPostListEmpty'
  * @returns {JSX.Element}
  * @constructor
  */
-const BlogPostListPage = ({ page = 1, posts = [], postCount, siteInfo }) => {
+const BlogPostListPage = ({ page = 1, posts = [], postCount }) => {
   const totalPage = Math.ceil(postCount / BLOG.POSTS_PER_PAGE)
   const showPagination = postCount >= BLOG.POSTS_PER_PAGE
-  if (!posts || posts.length === 0 || page > totalPage) {
+
+  if (!posts || posts.length === 0) {
     return <BlogPostListEmpty />
   } else {
     return (
@@ -22,7 +23,7 @@ const BlogPostListPage = ({ page = 1, posts = [], postCount, siteInfo }) => {
         {/* 文章列表 */}
         <div className="space-y-6 px-2">
           {posts.map(post => (
-            <BlogPostCard index={posts.indexOf(post)} key={post.id} post={post} siteInfo={siteInfo}/>
+            <BlogPostCard key={post.id} post={post} />
           ))}
         </div>
         {showPagination && <PaginationNumber page={page} totalPage={totalPage} />}

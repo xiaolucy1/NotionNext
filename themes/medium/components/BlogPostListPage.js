@@ -18,13 +18,11 @@ const BlogPostListPage = ({ page = 1, posts = [], postCount }) => {
     return <BlogPostListEmpty />
   } else {
     return (
-      <div className='w-full justify-center'>
-        <div id='container'>
+      <div id="container" className='w-full justify-center'>
         {/* 文章列表 */}
         {posts.map(post => (
           <BlogPostCard key={post.id} post={post} />
         ))}
-        </div>
         <PaginationSimple page={page} totalPage={totalPage} />
       </div>
     )

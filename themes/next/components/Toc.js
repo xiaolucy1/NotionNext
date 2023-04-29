@@ -11,6 +11,10 @@ import Progress from './Progress'
  * @constructor
  */
 const Toc = ({ toc }) => {
+  // 无目录就直接返回空
+  if (!toc || toc.length < 1) {
+    return <></>
+  }
   // 监听滚动事件
   React.useEffect(() => {
     window.addEventListener('scroll', actionSectionScrollSpy)
@@ -26,7 +30,7 @@ const Toc = ({ toc }) => {
 
   // 同步选中目录事件
   const [activeSection, setActiveSection] = React.useState(null)
-  const throttleMs = 200
+  const throttleMs = 100
   const actionSectionScrollSpy = React.useCallback(throttle(() => {
     const sections = document.getElementsByClassName('notion-h')
     let prevBBox = null
@@ -53,11 +57,6 @@ const Toc = ({ toc }) => {
     const index = tocIds.indexOf(currentSectionId) || 0
     tRef?.current?.scrollTo({ top: 28 * index, behavior: 'smooth' })
   }, throttleMs))
-
-  // 无目录就直接返回空
-  if (!toc || toc.length < 1) {
-    return <></>
-  }
 
   return <div className='px-3'>
     <div className='w-full pb-1'>

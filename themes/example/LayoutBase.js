@@ -6,7 +6,6 @@ import { Footer } from './components/Footer'
 import { Title } from './components/Title'
 import { SideBar } from './components/SideBar'
 import JumpToTopButton from './components/JumpToTopButton'
-import BLOG from '@/blog.config'
 /**
  * 基础布局 采用左右两侧布局，移动端使用顶部导航栏
 
@@ -16,7 +15,7 @@ import BLOG from '@/blog.config'
 const LayoutBase = props => {
   const { children, meta } = props
   return (
-        <div id='theme-example' className='dark:text-gray-300  bg-white dark:bg-black'>
+        <div className='dark:text-gray-300  bg-white dark:bg-black'>
             <CommonHead meta={meta} />
             {/* 顶栏LOGO */}
             <Header {...props} />
@@ -25,11 +24,11 @@ const LayoutBase = props => {
             <Nav {...props} />
 
             {/* 主体 */}
-            <div id='container-inner' className="w-full relative z-10">
+            <div className="w-full">
 
                 <Title {...props} />
 
-                <div className={(BLOG.LAYOUT_SIDEBAR_REVERSE ? 'flex-row-reverse' : '') + 'relative container mx-auto justify-center md:flex items-start py-8 px-2'}>
+                <div className="container mx-auto justify-center md:flex items-start py-8 px-2">
 
                     <div className='w-full max-w-3xl xl:px-14 lg:px-4 '>{children}</div>
 
@@ -41,7 +40,7 @@ const LayoutBase = props => {
 
             <Footer {...props} />
 
-            <div className='fixed right-4 bottom-4 z-10'>
+            <div className='fixed right-4 bottom-4'>
                 <JumpToTopButton />
             </div>
         </div>

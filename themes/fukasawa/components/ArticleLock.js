@@ -8,12 +8,14 @@ import { useGlobal } from '@/lib/global'
  * @returns
  */
 export const ArticleLock = props => {
-  const { validPassword } = props
+  const { password, validPassword } = props
   const { locale } = useGlobal()
 
   const submitPassword = () => {
     const p = document.getElementById('password')
-    if (!validPassword(p?.value)) {
+    if (p && p.value && p.value === password) {
+      validPassword(true)
+    } else {
       const tips = document.getElementById('tips')
       if (tips) {
         tips.innerHTML = ''
@@ -27,10 +29,10 @@ export const ArticleLock = props => {
       <div className="w-full flex justify-center items-center h-96 font-sans">
         <div className="text-center space-y-3">
           <div className='font-bold'>{locale.COMMON.ARTICLE_LOCK_TIPS}</div>
-          <div className="flex mx-4">
+          <div className="flex">
             <input
               id="password" type='password'
-              className="outline-none w-full text-sm pl-5 rounded-l transition focus:shadow-lg dark:text-gray-300 font-light leading-10 text-black bg-gray-100 dark:bg-gray-500"
+              className="w-full text-sm pl-5 rounded-l transition focus:shadow-lg dark:text-gray-300 font-light leading-10 text-black bg-gray-100 dark:bg-gray-500"
             ></input>
             <div
               onClick={submitPassword}

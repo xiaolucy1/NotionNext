@@ -18,9 +18,9 @@ const BlogPostListPage = ({ page = 1, posts = [], postCount }) => {
     return <BlogPostListEmpty />
   } else {
     return (
-      <div>
+      <div id="container">
         {/* 文章列表 */}
-        <div id="container" className="flex flex-wrap lg:space-y-4 space-y-1">
+        <div className="flex flex-wrap lg:space-y-4 space-y-1">
           {posts.map(post => (
             <BlogPostCard key={post.id} post={post} />
           ))}

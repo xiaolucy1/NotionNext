@@ -2,13 +2,11 @@ import { getGlobalNotionData } from '@/lib/notion/getNotionData'
 import { useGlobal } from '@/lib/global'
 import { useRouter } from 'next/router'
 import * as ThemeMap from '@/themes'
-import BLOG from '@/blog.config'
 
 const Search = props => {
   const { posts, siteInfo } = props
-  const router = useRouter()
   let filteredPosts
-  const searchKey = getSearchKey(router)
+  const searchKey = getSearchKey()
   // 静态过滤
   if (searchKey) {
     filteredPosts = posts.filter(post => {
@@ -19,7 +17,7 @@ const Search = props => {
       return searchContent.toLowerCase().includes(searchKey.toLowerCase())
     })
   } else {
-    filteredPosts = []
+    filteredPosts = posts
   }
 
   const { locale } = useGlobal()
@@ -54,15 +52,15 @@ export async function getStaticProps() {
     from: 'search-props',
     pageType: ['Post']
   })
-  const { allPages } = props
-  props.posts = allPages.filter(page => page.type === 'Post' && page.status === 'Published')
+  props.posts = props.allPosts
   return {
     props,
-    revalidate: parseInt(BLOG.NEXT_REVALIDATE_SECOND)
+    revalidate: 1
   }
 }
 
-function getSearchKey(router) {
+function getSearchKey() {
+  const router = useRouter()
   if (router.query && router.query.s) {
     return router.query.s
   }

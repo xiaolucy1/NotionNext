@@ -37,27 +37,32 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { page } }) {
   const from = `page-${page}`
   const props = await getGlobalNotionData({ from })
-  const { allPages } = props
-  const allPosts = allPages.filter(page => page.type === 'Post' && page.status === 'Published')
-  // 处理分页
-  props.posts = allPosts.slice(BLOG.POSTS_PER_PAGE * (page - 1), BLOG.POSTS_PER_PAGE * page)
   props.page = page
-
-  // 处理预览
+  // 处理分页
+  props.posts = props.allPosts.slice(
+    BLOG.POSTS_PER_PAGE * (page - 1),
+    BLOG.POSTS_PER_PAGE * page
+  )
   if (BLOG.POST_LIST_PREVIEW === 'true') {
     for (const i in props.posts) {
       const post = props.posts[i]
       if (post.password && post.password !== '') {
         continue
       }
-      post.blockMap = await getPostBlocks(post.id, 'slug', BLOG.POST_PREVIEW_LINES)
+      const blockMap = await getPostBlocks(
+        post.id,
+        'slug',
+        BLOG.POST_PREVIEW_LINES
+      )
+      if (blockMap) {
+        post.blockMap = blockMap
+      }
     }
   }
 
-  delete props.allPages
   return {
     props,
-    revalidate: parseInt(BLOG.NEXT_REVALIDATE_SECOND)
+    revalidate: 1
   }
 }
 

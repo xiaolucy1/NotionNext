@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import throttle from 'lodash.throttle'
 import { uuidToId } from 'notion-utils'
-import { useGlobal } from '@/lib/global'
 
 /**
  * 目录导航组件
@@ -10,8 +9,10 @@ import { useGlobal } from '@/lib/global'
  * @constructor
  */
 const Catalog = ({ toc }) => {
-  const { locale } = useGlobal()
-
+  // 无目录就直接返回空
+  if (!toc || toc.length < 1) {
+    return <></>
+  }
   // 监听滚动事件
   React.useEffect(() => {
     window.addEventListener('scroll', actionSectionScrollSpy)
@@ -27,7 +28,7 @@ const Catalog = ({ toc }) => {
 
   // 同步选中目录事件
   const [activeSection, setActiveSection] = React.useState(null)
-  const throttleMs = 200
+  const throttleMs = 100
   const actionSectionScrollSpy = React.useCallback(throttle(() => {
     const sections = document.getElementsByClassName('notion-h')
     let prevBBox = null
@@ -55,13 +56,8 @@ const Catalog = ({ toc }) => {
     tRef?.current?.scrollTo({ top: 28 * index, behavior: 'smooth' })
   }, throttleMs))
 
-  // 无目录就直接返回空
-  if (!toc || toc.length < 1) {
-    return <></>
-  }
-
   return <div>
-    <div className='w-full dark:text-gray-300 mb-2'><i className='mr-1 fas fa-stream' />{locale.COMMON.TABLE_OF_CONTENTS}</div>
+    <div className='w-full dark:text-gray-300 mb-2'><i className='mr-1 fas fa-stream' /> 目录</div>
     <div className='overflow-y-auto max-h-96 overscroll-none scroll-hidden' ref={tRef}>
       <nav className='h-full font-sans text-black'>
         {toc.map((tocItem) => {

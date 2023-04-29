@@ -6,8 +6,6 @@ import React, { useState } from 'react'
  * @returns
  */
 const Tabs = ({ className, children }) => {
-  const [currentTab, setCurrentTab] = useState(0)
-
   if (!children) {
     return <></>
   }
@@ -27,38 +25,36 @@ const Tabs = ({ className, children }) => {
 
   if (count === 1) {
     return <section className={'duration-200 ' + className}>
-            {children}
-        </section>
+      {children}
+    </section>
   }
 
-  function tabClickHandle(i) {
+  const [currentTab, setCurrentTab] = useState(0)
+
+  function tabClickHandle (i) {
     setCurrentTab(i)
   }
 
   return <div className={'mb-5 duration-200 ' + className}>
-        <ul className='flex justify-center space-x-5 pb-4 dark:text-gray-400 text-gray-600 overflow-auto'>
-            {children.map((item, index) => {
-              return <li key={index}
-                    className={(currentTab === index ? 'font-black border-b-2 border-red-400 text-red-400 animate__animated animate__jello ' : 'font-extralight cursor-pointer') + ' text-sm font-sans '}
-                    onClick={() => {
-                      tabClickHandle(index)
-                    }}>
-                    {item?.key}
-                </li>
-            })}
-        </ul>
-        <div>
-            {children.map((item, index) => {
-              return <section key={index}
-                    data-aos="fade-up"
-                    data-aos-duration="300"
-                    data-aos-once="true"
-                    data-aos-anchor-placement="top-bottom">
-                    {currentTab === index && item}
-                </section>
-            })}
-        </div>
+    <ul className='flex justify-center space-x-5 pb-4 dark:text-gray-400 text-gray-600'>
+      {children.map((item, index) => {
+        return <li key={index}
+                   className={(currentTab === index ? 'font-black border-b-2 border-red-400 text-red-400 animate__animated animate__jello ' : 'font-extralight cursor-pointer') + ' text-sm font-sans '}
+                   onClick={() => {
+                     tabClickHandle(index)
+                   }}>
+          {item?.key}
+        </li>
+      })}
+    </ul>
+    <div>
+      {children.map((item, index) => {
+        return <section key={index} className={ 'animate__animated animate__fadeIn animate__faster'}>
+          {currentTab === index && item}
+        </section>
+      })}
     </div>
+  </div>
 }
 
 export default Tabs
