@@ -3,17 +3,10 @@ import NotionPage from '@/components/NotionPage'
 import Link from 'next/link'
 import TagItemMini from './TagItemMini'
 
-/**
- * 博客列表的文字内容
- * @param {*} param0
- * @returns
- */
-export const BlogPostCardInfo = ({ post, showPreview, showPageCover, showSummary }) => {
-  return <div className={`flex flex-col justify-between lg:p-6 p-4  ${showPageCover && !showPreview ? 'md:w-7/12 w-full h-56 md:max-h-60 ' : 'w-full '}`}>
-
-       <div>
-         {/* 标题 */}
-         <Link
+export const BlogPostCardInfo = ({ post, showPreview, showSummary }) => {
+  return <>
+        {/* 标题 */}
+        <Link
             href={`${BLOG.SUB_PATH}/${post.slug}`}
             passHref
             className={`replace cursor-pointer hover:underline text-2xl ${showPreview ? 'text-center' : ''
@@ -39,16 +32,17 @@ export const BlogPostCardInfo = ({ post, showPreview, showPageCover, showSummary
             </Link>
         </div>
 
-          {/* 摘要 */}
-          {(!showPreview || showSummary) && !post.results && (
-            <p className="two-line-clamp replace my-3 text-gray-700  dark:text-gray-300 text-sm font-light leading-7">
+        {/* 摘要 */}
+        {(!showPreview || showSummary) && !post.results && (
+            <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical' }}
+                className="replace py-3 h-28 text-gray-700  dark:text-gray-300 text-sm font-light leading-7">
                 {post.summary}
             </p>
-          )}
+        )}
 
         {/* 搜索结果 */}
         {post.results && (
-            <p className="two-line-clamp mt-4 text-gray-700 dark:text-gray-300 text-sm font-light leading-7">
+            <p className="mt-4 text-gray-700 dark:text-gray-300 text-sm font-light leading-7">
                 {post.results.map(r => (
                     <span key={r}>{r}</span>
                 ))}
@@ -61,11 +55,8 @@ export const BlogPostCardInfo = ({ post, showPreview, showPageCover, showSummary
             </div>
         )}
 
-       </div>
-
-       <div>
-         {/* 分类标签 */}
-         <div className="text-gray-400 justify-between flex">
+        {/* 分类标签 */}
+        <div className="text-gray-400 justify-between flex">
             <Link
                 href={`/category/${post.category}`}
                 passHref
@@ -78,12 +69,11 @@ export const BlogPostCardInfo = ({ post, showPreview, showPageCover, showSummary
             <div className="md:flex-nowrap flex-wrap md:justify-start inline-block">
                 <div>
                     {' '}
-                    {post.tagItems?.map(tag => (
+                    {post.tagItems.map(tag => (
                         <TagItemMini key={tag.name} tag={tag} />
                     ))}
                 </div>
             </div>
         </div>
-       </div>
-       </div>
+    </>
 }

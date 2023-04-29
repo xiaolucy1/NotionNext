@@ -3,8 +3,9 @@ import { getPostBlocks } from '@/lib/notion'
 import { getGlobalNotionData } from '@/lib/notion/getNotionData'
 import * as ThemeMap from '@/themes'
 import { useGlobal } from '@/lib/global'
-import { generateRssToPublic } from '@/lib/rss'
+import { generateRss } from '@/lib/rss'
 import { generateRobotsTxt } from '@/lib/robots.txt'
+import { generateSitemapXml } from '@/lib/sitemap.xml'
 const Index = props => {
   const { theme } = useGlobal()
   const ThemeComponents = ThemeMap[theme]
@@ -25,9 +26,6 @@ export async function getStaticProps() {
     slug: '',
     type: 'website'
   }
-  
-  const globalNotionData = await getGlobalNotionData({ from: 'rss' })
-  await generateRssToPublic(globalNotionData?.latestPosts || []) // calling to generate the feed
   // 处理分页
   if (BLOG.POST_LIST_STYLE === 'scroll') {
     // 滚动列表默认给前端返回所有数据
@@ -48,6 +46,7 @@ export async function getStaticProps() {
 
   // 生成robotTxt
   generateRobotsTxt()
+  generateSitemapXml()
   // 生成Feed订阅
   if (JSON.parse(BLOG.ENABLE_RSS)) {
     generateRss(props?.latestPosts || [])
